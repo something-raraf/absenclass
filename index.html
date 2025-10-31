@@ -1,0 +1,2025 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Absensi XII RPL</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6C63FF;
+            --secondary: #FF6584;
+            --accent: #36D1DC;
+            --light: #F8F9FA;
+            --dark: #212529;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --gray: #6c757d;
+            --teacher: #8B5CF6;
+            --student: #10B981;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Poppins', sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 10px;
+        }
+        
+        .container {
+            max-width: 100%;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        }
+        
+        header {
+            text-align: center;
+            padding: 20px 15px;
+            background: linear-gradient(135deg, var(--primary), var(--accent));
+            color: white;
+            position: relative;
+        }
+        
+        .header-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        h1 {
+            font-size: 1.8rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+            text-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+        }
+        
+        .subtitle {
+            font-size: 1rem;
+            opacity: 0.9;
+            margin-bottom: 10px;
+        }
+        
+        .date-display {
+            background: rgba(255, 255, 255, 0.2);
+            display: inline-block;
+            padding: 6px 15px;
+            border-radius: 50px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            font-size: 0.9rem;
+        }
+        
+        .user-info {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: rgba(255, 255, 255, 0.2);
+            padding: 8px 15px;
+            border-radius: 50px;
+            font-weight: 600;
+            backdrop-filter: blur(10px);
+            font-size: 0.85rem;
+        }
+        
+        /* Login Section */
+        .login-section {
+            text-align: center;
+            padding: 30px 15px;
+        }
+        
+        .login-options {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-bottom: 25px;
+            flex-wrap: wrap;
+        }
+        
+        .login-option {
+            background: white;
+            border: 3px solid transparent;
+            border-radius: 12px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            min-width: 150px;
+            flex: 1;
+            max-width: 200px;
+        }
+        
+        .login-option:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.15);
+        }
+        
+        .login-option.active {
+            border-color: var(--primary);
+        }
+        
+        .login-option.teacher {
+            border-left: 5px solid var(--teacher);
+        }
+        
+        .login-option.student {
+            border-left: 5px solid var(--student);
+        }
+        
+        .login-icon {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .login-form {
+            max-width: 100%;
+            margin: 0 auto;
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+        }
+        
+        .student-select, .teacher-credentials {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            margin-bottom: 15px;
+            background: white;
+        }
+        
+        .teacher-credentials input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-size: 1rem;
+        }
+        
+        .login-btn {
+            background: var(--primary);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(108, 99, 255, 0.3);
+            width: 100%;
+        }
+        
+        .login-btn:hover {
+            background: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(108, 99, 255, 0.4);
+        }
+        
+        .tabs {
+            display: flex;
+            justify-content: center;
+            background: white;
+            padding: 0 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            flex-wrap: wrap;
+        }
+        
+        .tab {
+            padding: 12px 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+            position: relative;
+            color: var(--gray);
+            flex: 1;
+            text-align: center;
+            min-width: 120px;
+        }
+        
+        .tab.active {
+            color: var(--primary);
+        }
+        
+        .tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: var(--primary);
+            border-radius: 3px 3px 0 0;
+        }
+        
+        .tab-content {
+            display: none;
+            padding: 20px;
+            min-height: 400px;
+        }
+        
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        /* Attendance Section */
+        .attendance-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+            border-left: 5px solid var(--primary);
+        }
+        
+        .student-info {
+            margin-bottom: 20px;
+        }
+        
+        .student-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: var(--primary);
+            margin-bottom: 8px;
+        }
+        
+        .student-number {
+            display: inline-block;
+            background: var(--primary);
+            color: white;
+            padding: 6px 15px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+        
+        .attendance-status {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+            padding: 12px;
+            border-radius: 8px;
+            background: #f8f9fa;
+        }
+        
+        .status-present {
+            color: var(--success);
+            font-weight: 600;
+        }
+        
+        .status-sick {
+            color: var(--warning);
+            font-weight: 600;
+        }
+        
+        .status-permit {
+            color: var(--danger);
+            font-weight: 600;
+        }
+        
+        .status-alfa {
+            color: var(--gray);
+            font-weight: 600;
+        }
+        
+        .status-none {
+            color: var(--gray);
+            font-weight: 600;
+        }
+        
+        .status-pending {
+            color: var(--warning);
+            font-weight: 600;
+        }
+        
+        .status-approved {
+            color: var(--success);
+            font-weight: 600;
+        }
+        
+        .status-rejected {
+            color: var(--danger);
+            font-weight: 600;
+        }
+        
+        .attendance-buttons {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+        
+        .btn {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+            min-width: 100px;
+            flex: 1;
+        }
+        
+        .btn-present {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-sick {
+            background: var(--warning);
+            color: var(--dark);
+        }
+        
+        .btn-permit {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-approve {
+            background: var(--success);
+            color: white;
+        }
+        
+        .btn-reject {
+            background: var(--danger);
+            color: white;
+        }
+        
+        .btn-logout {
+            background: var(--gray);
+            color: white;
+        }
+        
+        .btn:hover:not(:disabled) {
+            opacity: 0.9;
+            transform: scale(1.05);
+        }
+        
+        .btn:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+        
+        /* Form Styles */
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--dark);
+            font-size: 0.95rem;
+        }
+        
+        input, select, textarea {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        input:focus, select:focus, textarea:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(108, 99, 255, 0.1);
+            outline: none;
+        }
+        
+        input:disabled, select:disabled, textarea:disabled {
+            background-color: #f5f5f5;
+            color: #999;
+            cursor: not-allowed;
+        }
+        
+        .file-upload {
+            position: relative;
+            overflow: hidden;
+            display: inline-block;
+            width: 100%;
+        }
+        
+        .file-upload-btn {
+            background: var(--primary);
+            color: white;
+            padding: 12px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            display: block;
+            text-align: center;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+        
+        .file-upload input[type=file] {
+            position: absolute;
+            left: 0;
+            top: 0;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+        
+        .preview-image {
+            max-width: 100%;
+            max-height: 150px;
+            margin-top: 12px;
+            border-radius: 8px;
+            display: none;
+            border: 2px dashed #ddd;
+            padding: 8px;
+        }
+        
+        .submit-btn {
+            background: var(--primary);
+            color: white;
+            padding: 12px 30px;
+            border: none;
+            border-radius: 50px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: block;
+            margin: 25px auto 0;
+            box-shadow: 0 5px 15px rgba(108, 99, 255, 0.3);
+            width: 100%;
+        }
+        
+        .submit-btn:hover:not(:disabled) {
+            background: var(--accent);
+            transform: translateY(-3px);
+            box-shadow: 0 8px 20px rgba(108, 99, 255, 0.4);
+        }
+        
+        .submit-btn:disabled {
+            background: var(--gray);
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+        
+        /* Permit List for Teacher */
+        .permit-list {
+            display: grid;
+            gap: 15px;
+            margin-top: 15px;
+        }
+        
+        .permit-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-left: 5px solid var(--warning);
+            transition: transform 0.3s ease;
+        }
+        
+        .permit-card:hover {
+            transform: translateY(-3px);
+        }
+        
+        .permit-card.approved {
+            border-left-color: var(--success);
+        }
+        
+        .permit-card.rejected {
+            border-left-color: var(--danger);
+        }
+        
+        .permit-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+        
+        .permit-student {
+            font-weight: 700;
+            font-size: 1.1rem;
+            color: var(--primary);
+        }
+        
+        .permit-type {
+            background: var(--warning);
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        .permit-details {
+            margin-bottom: 12px;
+        }
+        
+        .permit-date {
+            color: var(--gray);
+            margin-bottom: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .permit-reason {
+            background: #f8f9fa;
+            padding: 12px;
+            border-radius: 8px;
+            margin-bottom: 12px;
+            font-size: 0.95rem;
+        }
+        
+        .permit-actions {
+            display: flex;
+            gap: 8px;
+            justify-content: flex-end;
+            flex-wrap: wrap;
+        }
+        
+        /* Summary Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+            font-size: 0.9rem;
+        }
+        
+        th {
+            background: var(--primary);
+            color: white;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            letter-spacing: 1px;
+        }
+        
+        tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .summary-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .summary-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+        
+        .summary-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .summary-card h3 {
+            font-size: 2rem;
+            margin-bottom: 8px;
+            font-weight: 700;
+        }
+        
+        .summary-card p {
+            color: #666;
+            font-weight: 600;
+            font-size: 1rem;
+        }
+        
+        .card-present {
+            border-top: 5px solid var(--success);
+        }
+        
+        .card-sick {
+            border-top: 5px solid var(--warning);
+        }
+        
+        .card-permit {
+            border-top: 5px solid var(--danger);
+        }
+        
+        .card-alfa {
+            border-top: 5px solid var(--gray);
+        }
+        
+        .card-total {
+            border-top: 5px solid var(--primary);
+        }
+        
+        .month-selector {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            background: #f8f9fa;
+            padding: 12px 15px;
+            border-radius: 8px;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        
+        .month-selector select {
+            width: auto;
+            margin: 0 5px;
+            padding: 8px;
+            font-size: 0.9rem;
+        }
+        
+        .action-buttons {
+            display: flex;
+            gap: 8px;
+            margin-top: 15px;
+        }
+        
+        .export-btn {
+            background: var(--accent);
+            color: white;
+            padding: 8px 15px;
+            border: none;
+            border-radius: 50px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.9rem;
+        }
+        
+        .export-btn:hover {
+            background: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        footer {
+            text-align: center;
+            margin-top: 30px;
+            padding: 15px;
+            color: #666;
+            font-size: 0.8rem;
+            border-top: 1px solid #eee;
+        }
+        
+        .notification {
+            position: fixed;
+            top: 15px;
+            right: 15px;
+            padding: 12px 20px;
+            background: var(--success);
+            color: white;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transform: translateX(150%);
+            transition: transform 0.3s ease;
+            z-index: 1000;
+            max-width: 300px;
+            font-size: 0.9rem;
+        }
+        
+        .notification.show {
+            transform: translateX(0);
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 18px;
+            height: 18px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid var(--primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin-right: 8px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .hidden {
+            display: none !important;
+        }
+        
+        .teacher-only {
+            display: none;
+        }
+        
+        .teacher-mode .teacher-only {
+            display: block;
+        }
+        
+        .teacher-mode .student-only {
+            display: none;
+        }
+        
+        .form-disabled {
+            opacity: 0.6;
+            pointer-events: none;
+        }
+        
+        .form-disabled-message {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 20px;
+            border-left: 4px solid var(--warning);
+        }
+        
+        .time-info {
+            background: #f8f9fa;
+            padding: 10px 15px;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            text-align: center;
+            border-left: 4px solid var(--primary);
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .tabs {
+                flex-direction: column;
+            }
+            
+            .tab {
+                text-align: center;
+                border-bottom: 1px solid #eee;
+            }
+            
+            .tab.active::after {
+                width: 50%;
+                left: 25%;
+            }
+            
+            .month-selector {
+                flex-direction: column;
+                gap: 10px;
+            }
+            
+            .attendance-buttons {
+                flex-direction: column;
+            }
+            
+            .permit-actions {
+                flex-direction: column;
+            }
+            
+            h1 {
+                font-size: 1.5rem;
+            }
+            
+            .user-info {
+                position: static;
+                margin-top: 10px;
+                display: inline-block;
+            }
+            
+            .login-option {
+                min-width: 100%;
+                max-width: 100%;
+            }
+            
+            .summary-cards {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            body {
+                padding: 5px;
+            }
+            
+            .container {
+                border-radius: 10px;
+            }
+            
+            header {
+                padding: 15px 10px;
+            }
+            
+            h1 {
+                font-size: 1.3rem;
+            }
+            
+            .subtitle {
+                font-size: 0.9rem;
+            }
+            
+            .date-display {
+                font-size: 0.8rem;
+                padding: 5px 12px;
+            }
+            
+            .login-section {
+                padding: 20px 10px;
+            }
+            
+            .tab-content {
+                padding: 15px;
+            }
+            
+            .summary-cards {
+                grid-template-columns: 1fr;
+            }
+            
+            th, td {
+                padding: 8px;
+                font-size: 0.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <div class="header-content">
+                <h1>ABSENSI XII RPL</h1>
+                <p class="subtitle">Sistem Guru & Siswa - Kelas Rekayasa Perangkat Lunak</p>
+                <div class="date-display" id="current-date">Selasa, 17 Oktober 2023</div>
+                <div class="user-info hidden" id="user-info">
+                    <span id="user-role"></span>: <span id="user-name"></span>
+                    <button class="btn btn-logout" id="logout-btn" style="margin-left: 10px; padding: 5px 10px; font-size: 0.8rem;">Logout</button>
+                </div>
+            </div>
+        </header>
+        
+        <!-- Login Section -->
+        <div class="login-section" id="login-section">
+            <h2>Pilih Jenis Login</h2>
+            <div class="login-options">
+                <div class="login-option teacher" data-role="teacher">
+                    <div class="login-icon">👨‍🏫</div>
+                    <h3>Login Guru</h3>
+                    <p>Kelola absensi dan persetujuan izin</p>
+                </div>
+                <div class="login-option student active" data-role="student">
+                    <div class="login-icon">🎓</div>
+                    <h3>Login Siswa</h3>
+                    <p>Absensi harian dan pengajuan izin</p>
+                </div>
+            </div>
+            
+            <!-- Student Login Form -->
+            <div class="login-form" id="student-login-form">
+                <select class="student-select" id="student-select">
+                    <option value="">-- Pilih Nama Anda --</option>
+                    <!-- Opsi siswa akan diisi oleh JavaScript -->
+                </select>
+                <button class="login-btn" id="student-login-btn">🎯 Masuk sebagai Siswa</button>
+            </div>
+            
+            <!-- Teacher Login Form -->
+            <div class="login-form hidden" id="teacher-login-form">
+                <div class="teacher-credentials">
+                    <input type="text" id="teacher-username" placeholder="Username Guru" value="guruxii">
+                    <input type="password" id="teacher-password" placeholder="Password" value="rpl2023">
+                </div>
+                <button class="login-btn" id="teacher-login-btn">👨‍🏫 Masuk sebagai Guru</button>
+            </div>
+        </div>
+        
+        <!-- Main Content (setelah login) -->
+        <div class="main-content hidden" id="main-content">
+            <!-- Tabs untuk Siswa -->
+            <div class="tabs student-only">
+                <div class="tab active" data-tab="attendance">📊 Absensi Saya</div>
+                <div class="tab" data-tab="permit">📝 Izin / Sakit</div>
+            </div>
+            
+            <!-- Tabs untuk Guru -->
+            <div class="tabs teacher-only">
+                <div class="tab active" data-tab="today-attendance">📅 Absen Hari Ini</div>
+                <div class="tab" data-tab="permits-management">✅ Kelola Izin</div>
+                <div class="tab" data-tab="summary">📈 Rekap Kelas</div>
+            </div>
+            
+            <!-- Tab: Absensi Saya (Student Only) -->
+            <div class="tab-content active" id="attendance">
+                <div class="attendance-card" id="attendance-card">
+                    <div class="student-info">
+                        <div class="student-name" id="logged-student-name">Nama Siswa</div>
+                        <div class="student-number" id="logged-student-number">No. 0</div>
+                    </div>
+                    
+                    <div class="time-info" id="time-info">
+                        <p>⏰ Waktu absen: <strong>07:00 - 09:00</strong></p>
+                        <p id="current-time-display"></p>
+                    </div>
+                    
+                    <div class="attendance-status" id="attendance-status">
+                        Status kehadiran hari ini: <span class="status-none">Belum absen</span>
+                    </div>
+                    
+                    <div class="attendance-buttons" id="attendance-buttons">
+                        <button class="btn btn-present" data-status="present">✅ Hadir</button>
+                        <button class="btn btn-sick" data-status="sick">🤒 Sakit</button>
+                        <button class="btn btn-permit" data-status="permit">📝 Izin</button>
+                    </div>
+                    
+                    <div id="already-absent-message" class="hidden">
+                        <p style="color: var(--warning); font-weight: 600; margin-top: 15px;">
+                            Anda sudah melakukan absensi hari ini. Jika ada perubahan, hubungi wali kelas.
+                        </p>
+                    </div>
+                    
+                    <div id="time-expired-message" class="hidden">
+                        <p style="color: var(--danger); font-weight: 600; margin-top: 15px;">
+                            ⚠️ Waktu absen telah berakhir (07:00-09:00). Anda tidak dapat melakukan absensi hari ini.
+                        </p>
+                    </div>
+                </div>
+                
+                <div id="permit-info" class="hidden">
+                    <h3>Informasi Izin / Sakit</h3>
+                    <p>Jika Anda memilih sakit atau izin, silakan lengkapi form di tab <strong>"Izin / Sakit"</strong>.</p>
+                </div>
+            </div>
+            
+            <!-- Tab: Form Izin (Student Only) -->
+            <div class="tab-content" id="permit">
+                <h2>Form Izin / Sakit</h2>
+                
+                <div id="form-disabled-message" class="form-disabled-message hidden">
+                    <h3>Form Tidak Tersedia</h3>
+                    <p>Anda telah memilih <strong>Hadir</strong> hari ini. Form izin hanya dapat diisi jika Anda memilih Sakit atau Izin.</p>
+                </div>
+                
+                <div id="form-enabled-message" class="hidden">
+                    <p>Lengkapi form ini untuk mengajukan izin atau sakit:</p>
+                </div>
+                
+                <form id="permit-form">
+                    <div class="form-group">
+                        <label for="permit-student">Nama Siswa</label>
+                        <input type="text" id="permit-student" readonly>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="permit-type">Jenis Ketidakhadiran</label>
+                        <select id="permit-type" required>
+                            <option value="">-- Pilih Jenis --</option>
+                            <option value="sakit">Sakit</option>
+                            <option value="izin">Izin</option>
+                            <option value="lainnya">Lainnya</option>
+                        </select>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="permit-date">Tanggal</label>
+                        <input type="date" id="permit-date" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="permit-reason">Alasan</label>
+                        <textarea id="permit-reason" rows="4" placeholder="Tuliskan alasan ketidakhadiran..." required></textarea>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label>Upload Surat Izin / Keterangan Dokter (Opsional)</label>
+                        <div class="file-upload">
+                            <div class="file-upload-btn">📎 Pilih File</div>
+                            <input type="file" id="permit-file" accept="image/*,.pdf">
+                        </div>
+                        <img id="preview" class="preview-image" src="" alt="Preview Surat Izin">
+                    </div>
+                    
+                    <button type="submit" class="submit-btn" id="submit-permit" disabled>
+                        <span class="loading" id="permit-loading" style="display: none;"></span>
+                        📤 Kirim Permohonan Izin
+                    </button>
+                </form>
+            </div>
+            
+            <!-- Tab: Absen Hari Ini (Teacher Only) -->
+            <div class="tab-content" id="today-attendance">
+                <h2>Absensi Hari Ini</h2>
+                <p>Status kehadiran seluruh siswa XII RPL hari ini:</p>
+                
+                <div class="summary-cards">
+                    <div class="summary-card card-present">
+                        <h3 id="today-present-count">0</h3>
+                        <p>Hadir</p>
+                    </div>
+                    <div class="summary-card card-sick">
+                        <h3 id="today-sick-count">0</h3>
+                        <p>Sakit</p>
+                    </div>
+                    <div class="summary-card card-permit">
+                        <h3 id="today-permit-count">0</h3>
+                        <p>Izin</p>
+                    </div>
+                    <div class="summary-card card-alfa">
+                        <h3 id="today-alfa-count">0</h3>
+                        <p>Alfa</p>
+                    </div>
+                </div>
+                
+                <table id="today-attendance-table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Siswa</th>
+                            <th>Status</th>
+                            <th>Waktu Absen</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="4" style="text-align: center;">Memuat data...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Tab: Kelola Izin (Teacher Only) -->
+            <div class="tab-content" id="permits-management">
+                <h2>Kelola Permohonan Izin Siswa</h2>
+                <p>Persetujuan permohonan izin dan sakit dari siswa:</p>
+                
+                <div class="permit-list" id="permit-list">
+                    <!-- Daftar permohonan izin akan diisi oleh JavaScript -->
+                </div>
+            </div>
+            
+            <!-- Tab: Rekap Kelas (Teacher Only) -->
+            <div class="tab-content" id="summary">
+                <h2>Rekap Absensi Kelas</h2>
+                <p>Data kehadiran seluruh siswa XII RPL:</p>
+                
+                <div class="month-selector">
+                    <div>
+                        <label for="month-select">Pilih Bulan: </label>
+                        <select id="month-select">
+                            <option value="1">Januari</option>
+                            <option value="2">Februari</option>
+                            <option value="3">Maret</option>
+                            <option value="4">April</option>
+                            <option value="5">Mei</option>
+                            <option value="6">Juni</option>
+                            <option value="7">Juli</option>
+                            <option value="8">Agustus</option>
+                            <option value="9">September</option>
+                            <option value="10">Oktober</option>
+                            <option value="11">November</option>
+                            <option value="12">Desember</option>
+                        </select>
+                        
+                        <select id="year-select">
+                            <!-- Opsi tahun akan diisi oleh JavaScript -->
+                        </select>
+                    </div>
+                    
+                    <button class="export-btn" id="export-pdf">📄 Export PDF</button>
+                </div>
+                
+                <div class="summary-cards">
+                    <div class="summary-card card-present">
+                        <h3 id="present-count">0</h3>
+                        <p>Hadir</p>
+                    </div>
+                    <div class="summary-card card-sick">
+                        <h3 id="sick-count">0</h3>
+                        <p>Sakit</p>
+                    </div>
+                    <div class="summary-card card-permit">
+                        <h3 id="permit-count">0</h3>
+                        <p>Izin</p>
+                    </div>
+                    <div class="summary-card card-alfa">
+                        <h3 id="alfa-count">0</h3>
+                        <p>Alfa</p>
+                    </div>
+                    <div class="summary-card card-total">
+                        <h3 id="total-count">0</h3>
+                        <p>Total Siswa</p>
+                    </div>
+                </div>
+                
+                <table id="attendance-table">
+                    <thead>
+                        <tr>
+                            <th>No</th>
+                            <th>Nama Siswa</th>
+                            <th>Hadir</th>
+                            <th>Sakit</th>
+                            <th>Izin</th>
+                            <th>Alfa</th>
+                            <th>Total</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr><td colspan="7" style="text-align: center;">Memuat data...</td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        
+        <footer>
+            <p>&copy; 2023 Absensi XII RPL</p>
+        </footer>
+    </div>
+
+    <div class="notification" id="notification">Pesan notifikasi</div>
+
+    <script>
+        // Data siswa (34 siswa kelas XII RPL) - DIPERBARUI
+        let students = [
+            { id: 1, name: "ABI QATADA MAULANA KUSUMA" },
+            { id: 2, name: "ADITYA KHARISMA PUTRA" },
+            { id: 3, name: "AHMAD ARDIANSYAH" },
+            { id: 4, name: "ALDO RIZZQULLAH IZZATUL IBAD" },
+            { id: 5, name: "ALYA LUSI ANDHINI" },
+            { id: 6, name: "AMAJID MAULANA" },
+            { id: 7, name: "AULIA MAHARANI" },
+            { id: 8, name: "AURELLIA ISLAMAYA" },
+            { id: 9, name: "DEVI RISKI YOLANDA" },
+            { id: 10, name: "DEWI DEVITA RISSA SINAGA" },
+            { id: 11, name: "FARREL ANANTA FIRMANSYAH" },
+            { id: 12, name: "FIRDIANA PUTRI" },
+            { id: 13, name: "HENDRA SHAPUTRA" },
+            { id: 14, name: "M. FAIRUZ SHEVA SYAH DEWA" },
+            { id: 15, name: "M. RAFI FIRMANSYAH" },
+            { id: 16, name: "MARSHEILLO BINTANG FAHRENZHA" },
+            { id: 17, name: "MAULANA CANNAVARO HIDAYATULLOH" },
+            { id: 18, name: "MOCHAMAD RAVI AINUR ROSIDA" },
+            { id: 19, name: "MOCHAMAD ZAKIY FARMA PUTRA" },
+            { id: 20, name: "MOH. HAIDAR IBADDILLAH" },
+            { id: 21, name: "MUHAMMAD AFFIZAR IBRAHIM ALKAUTSAR" },
+            { id: 22, name: "MUHAMMAD AWFA IBLAANI HOLIL" },
+            { id: 23, name: "MUHAMMAD VALENTINO ADI" },
+            { id: 24, name: "NASWA SOFIYA ULARAHΜΑ" },
+            { id: 25, name: "RAFIF MAHESWARA" },
+            { id: 26, name: "RIFKA AULIA NURROHMA" },
+            { id: 27, name: "SANNIYA MIRZA AZ-ZAHRA" },
+            { id: 28, name: "SELSA EKA PUTRI VARIS NOVITATIN" },
+            { id: 29, name: "SHEVADZIKRA IHSAN AIMANULLAH" },
+            { id: 30, name: "SUSY RETNO HERAWATI" },
+            { id: 31, name: "WILDAN MAULANA PRASITIO" },
+            { id: 32, name: "ZAHRINA GHASSANI FIRDAUS" },
+            { id: 33, name: "ZAHRINA INTAN SAPUTRI" },
+            { id: 34, name: "ZAHWA AURELIA PUTRI" }
+        ];
+
+        // Data guru
+        const teachers = [
+            { id: 1, username: "guruxii", password: "rpl2023", name: "Bu Sari, S.Pd" },
+            { id: 2, username: "walikelas", password: "rpl123", name: "Pak Budi, M.Pd" }
+        ];
+
+        // State aplikasi
+        let currentUser = null;
+        let userRole = null;
+        let todayAttendance = {};
+
+        // Inisialisasi database di localStorage
+        function initializeDatabase() {
+            if (!localStorage.getItem('attendanceData')) {
+                localStorage.setItem('attendanceData', JSON.stringify({}));
+            }
+            if (!localStorage.getItem('permitData')) {
+                localStorage.setItem('permitData', JSON.stringify([]));
+            }
+            if (!localStorage.getItem('studentData')) {
+                localStorage.setItem('studentData', JSON.stringify(students));
+            } else {
+                // Load siswa dari localStorage jika ada
+                students = JSON.parse(localStorage.getItem('studentData'));
+            }
+            
+            // Inisialisasi state aplikasi
+            if (!localStorage.getItem('appState')) {
+                localStorage.setItem('appState', JSON.stringify({
+                    isLoggedIn: false,
+                    userRole: null,
+                    userId: null,
+                    activeTab: 'attendance'
+                }));
+            }
+        }
+
+        // Fungsi untuk mendapatkan data dari database
+        function getDatabase() {
+            return {
+                attendanceData: JSON.parse(localStorage.getItem('attendanceData')),
+                permitData: JSON.parse(localStorage.getItem('permitData')),
+                studentData: JSON.parse(localStorage.getItem('studentData')),
+                appState: JSON.parse(localStorage.getItem('appState'))
+            };
+        }
+
+        // Fungsi untuk menyimpan data ke database
+        function saveToDatabase(data) {
+            if (data.attendanceData) {
+                localStorage.setItem('attendanceData', JSON.stringify(data.attendanceData));
+            }
+            if (data.permitData) {
+                localStorage.setItem('permitData', JSON.stringify(data.permitData));
+            }
+            if (data.studentData) {
+                localStorage.setItem('studentData', JSON.stringify(data.studentData));
+            }
+            if (data.appState) {
+                localStorage.setItem('appState', JSON.stringify(data.appState));
+            }
+        }
+
+        // Fungsi untuk menyimpan state aplikasi
+        function saveAppState() {
+            const appState = {
+                isLoggedIn: currentUser !== null,
+                userRole: userRole,
+                userId: currentUser ? currentUser.id : null,
+                activeTab: document.querySelector('.tab.active') ? document.querySelector('.tab.active').dataset.tab : 'attendance'
+            };
+            saveToDatabase({ appState: appState });
+        }
+
+        // Fungsi untuk memulihkan state aplikasi
+        function restoreAppState() {
+            const db = getDatabase();
+            const appState = db.appState;
+            
+            if (appState.isLoggedIn) {
+                if (appState.userRole === 'student') {
+                    const student = students.find(s => s.id === appState.userId);
+                    if (student) {
+                        currentUser = student;
+                        userRole = 'student';
+                        
+                        // Sembunyikan login section, tampilkan konten utama
+                        document.getElementById('login-section').classList.add('hidden');
+                        document.getElementById('main-content').classList.remove('hidden');
+                        document.getElementById('user-info').classList.remove('hidden');
+                        
+                        // Update info user
+                        document.getElementById('user-name').textContent = currentUser.name;
+                        document.getElementById('user-role').textContent = 'Siswa';
+                        
+                        // Update info siswa yang login
+                        document.getElementById('logged-student-name').textContent = currentUser.name;
+                        document.getElementById('logged-student-number').textContent = `No. ${currentUser.id}`;
+                        document.getElementById('permit-student').value = currentUser.name;
+                        
+                        // Cek status absensi hari ini
+                        checkTodayAttendance();
+                        
+                        // Switch ke tab yang aktif sebelumnya
+                        if (appState.activeTab) {
+                            switchTab(appState.activeTab);
+                        }
+                    }
+                } else if (appState.userRole === 'teacher') {
+                    const teacher = teachers.find(t => t.id === appState.userId);
+                    if (teacher) {
+                        currentUser = teacher;
+                        userRole = 'teacher';
+                        
+                        // Sembunyikan login section, tampilkan konten utama
+                        document.getElementById('login-section').classList.add('hidden');
+                        document.getElementById('main-content').classList.remove('hidden');
+                        document.getElementById('user-info').classList.remove('hidden');
+                        document.body.classList.add('teacher-mode');
+                        
+                        // Update info user
+                        document.getElementById('user-name').textContent = currentUser.name;
+                        document.getElementById('user-role').textContent = 'Guru';
+                        
+                        // Switch ke tab yang aktif sebelumnya
+                        if (appState.activeTab) {
+                            switchTab(appState.activeTab);
+                        }
+                    }
+                }
+            }
+        }
+
+        // Fungsi untuk menampilkan notifikasi
+        function showNotification(message, type = 'success') {
+            const notification = document.getElementById('notification');
+            notification.textContent = message;
+            notification.style.background = type === 'success' ? 'var(--success)' : 
+                                          type === 'error' ? 'var(--danger)' : 'var(--warning)';
+            notification.classList.add('show');
+            
+            setTimeout(() => {
+                notification.classList.remove('show');
+            }, 3000);
+        }
+
+        // Fungsi untuk mengisi dropdown siswa
+        function renderStudentSelect() {
+            const studentSelect = document.getElementById('student-select');
+            studentSelect.innerHTML = '<option value="">-- Pilih Nama Anda --</option>';
+            
+            students.forEach(student => {
+                const option = document.createElement('option');
+                option.value = student.id;
+                option.textContent = `${student.id}. ${student.name}`;
+                studentSelect.appendChild(option);
+            });
+        }
+
+        // Fungsi untuk mengisi dropdown tahun
+        function renderYearSelect() {
+            const yearSelect = document.getElementById('year-select');
+            yearSelect.innerHTML = '';
+            
+            // Tambahkan opsi tahun dari 2023 sampai 2026
+            for (let year = 2023; year <= 2026; year++) {
+                const option = document.createElement('option');
+                option.value = year;
+                option.textContent = year;
+                yearSelect.appendChild(option);
+            }
+            
+            // Set tahun saat ini sebagai default
+            const currentYear = new Date().getFullYear();
+            yearSelect.value = currentYear;
+        }
+
+        // Fungsi untuk login
+        function login(role) {
+            if (role === 'student') {
+                const studentSelect = document.getElementById('student-select');
+                const studentId = parseInt(studentSelect.value);
+                
+                if (!studentId) {
+                    showNotification('Pilih nama Anda terlebih dahulu!', 'error');
+                    return;
+                }
+                
+                const student = students.find(s => s.id === studentId);
+                if (!student) {
+                    showNotification('Siswa tidak ditemukan!', 'error');
+                    return;
+                }
+                
+                currentUser = student;
+                userRole = 'student';
+                
+            } else if (role === 'teacher') {
+                const username = document.getElementById('teacher-username').value;
+                const password = document.getElementById('teacher-password').value;
+                
+                const teacher = teachers.find(t => t.username === username && t.password === password);
+                if (!teacher) {
+                    showNotification('Username atau password salah!', 'error');
+                    return;
+                }
+                
+                currentUser = teacher;
+                userRole = 'teacher';
+            }
+            
+            // Sembunyikan login section, tampilkan konten utama
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('main-content').classList.remove('hidden');
+            document.getElementById('user-info').classList.remove('hidden');
+            
+            // Update info user
+            document.getElementById('user-name').textContent = currentUser.name;
+            document.getElementById('user-role').textContent = userRole === 'teacher' ? 'Guru' : 'Siswa';
+            
+            // Set mode teacher/student
+            if (userRole === 'teacher') {
+                document.body.classList.add('teacher-mode');
+                // Default tab untuk guru adalah Absen Hari Ini
+                switchTab('today-attendance');
+            } else {
+                document.body.classList.remove('teacher-mode');
+                // Update info siswa yang login
+                document.getElementById('logged-student-name').textContent = currentUser.name;
+                document.getElementById('logged-student-number').textContent = `No. ${currentUser.id}`;
+                document.getElementById('permit-student').value = currentUser.name;
+                
+                // Cek status absensi hari ini
+                checkTodayAttendance();
+            }
+            
+            // Simpan state aplikasi
+            saveAppState();
+            
+            showNotification(`Selamat datang, ${currentUser.name}!`);
+        }
+
+        // Fungsi untuk cek apakah waktu absen masih berlaku (07:00-09:00)
+        function isAttendanceTimeValid() {
+            const now = new Date();
+            const currentHour = now.getHours();
+            const currentMinute = now.getMinutes();
+            
+            // Cek apakah waktu saat ini antara 07:00 dan 09:00
+            if (currentHour > 7 && currentHour < 9) {
+                return true;
+            } else if (currentHour === 7 && currentMinute >= 0) {
+                return true;
+            } else if (currentHour === 9 && currentMinute === 0) {
+                return true;
+            }
+            return false;
+        }
+
+        // Fungsi untuk cek absensi hari ini (student)
+        function checkTodayAttendance() {
+            const db = getDatabase();
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Inisialisasi data hari ini jika belum ada
+            if (!db.attendanceData[today]) {
+                db.attendanceData[today] = {};
+            }
+            
+            todayAttendance = db.attendanceData[today];
+            const studentAttendance = todayAttendance[currentUser.id];
+            
+            // Update tampilan status
+            const statusElement = document.getElementById('attendance-status');
+            const buttonsContainer = document.getElementById('attendance-buttons');
+            const alreadyAbsentMessage = document.getElementById('already-absent-message');
+            const permitInfo = document.getElementById('permit-info');
+            const timeExpiredMessage = document.getElementById('time-expired-message');
+            
+            // Cek apakah waktu absen masih berlaku
+            const isTimeValid = isAttendanceTimeValid();
+            
+            // Update form izin berdasarkan status absensi
+            updatePermitFormAccess(studentAttendance);
+            
+            if (studentAttendance) {
+                // Siswa sudah absen hari ini
+                statusElement.innerHTML = `Status kehadiran hari ini: <span class="status-${studentAttendance.status}">${getStatusText(studentAttendance.status)}</span>`;
+                buttonsContainer.classList.add('hidden');
+                alreadyAbsentMessage.classList.remove('hidden');
+                timeExpiredMessage.classList.add('hidden');
+                
+                // Tampilkan info form izin jika statusnya sakit atau izin
+                if (studentAttendance.status === 'sick' || studentAttendance.status === 'permit') {
+                    permitInfo.classList.remove('hidden');
+                }
+            } else {
+                // Siswa belum absen
+                if (isTimeValid) {
+                    statusElement.innerHTML = 'Status kehadiran hari ini: <span class="status-none">Belum absen</span>';
+                    buttonsContainer.classList.remove('hidden');
+                    alreadyAbsentMessage.classList.add('hidden');
+                    timeExpiredMessage.classList.add('hidden');
+                } else {
+                    statusElement.innerHTML = 'Status kehadiran hari ini: <span class="status-alfa">Alfa (Tidak Absen)</span>';
+                    buttonsContainer.classList.add('hidden');
+                    alreadyAbsentMessage.classList.add('hidden');
+                    timeExpiredMessage.classList.remove('hidden');
+                }
+                permitInfo.classList.add('hidden');
+            }
+            
+            saveToDatabase(db);
+        }
+
+        // Fungsi untuk mengatur akses form izin berdasarkan status absensi
+        function updatePermitFormAccess(attendanceStatus) {
+            const form = document.getElementById('permit-form');
+            const formElements = form.querySelectorAll('input, select, textarea, button');
+            const submitBtn = document.getElementById('submit-permit');
+            const disabledMessage = document.getElementById('form-disabled-message');
+            const enabledMessage = document.getElementById('form-enabled-message');
+            
+            if (attendanceStatus && attendanceStatus.status === 'present') {
+                // Jika siswa hadir, nonaktifkan form izin
+                formElements.forEach(element => {
+                    if (element.id !== 'permit-student') {
+                        element.disabled = true;
+                    }
+                });
+                submitBtn.disabled = true;
+                disabledMessage.classList.remove('hidden');
+                enabledMessage.classList.add('hidden');
+                form.classList.add('form-disabled');
+            } else {
+                // Jika siswa belum absen atau memilih sakit/izin, aktifkan form
+                formElements.forEach(element => {
+                    element.disabled = false;
+                });
+                
+                // Jika belum absen, tetap nonaktifkan tombol submit
+                if (!attendanceStatus) {
+                    submitBtn.disabled = true;
+                } else {
+                    submitBtn.disabled = false;
+                }
+                
+                disabledMessage.classList.add('hidden');
+                enabledMessage.classList.remove('hidden');
+                form.classList.remove('form-disabled');
+            }
+        }
+
+        // Fungsi untuk mendapatkan teks status
+        function getStatusText(status) {
+            switch(status) {
+                case 'present': return 'Hadir';
+                case 'sick': return 'Sakit';
+                case 'permit': return 'Izin';
+                case 'alfa': return 'Alfa';
+                default: return 'Belum absen';
+            }
+        }
+
+        // Fungsi untuk mencatat absensi (student)
+        function recordAttendance(status) {
+            // Cek apakah waktu absen masih berlaku
+            if (!isAttendanceTimeValid()) {
+                showNotification('Waktu absen telah berakhir (07:00-09:00). Anda tidak dapat melakukan absensi hari ini.', 'error');
+                return;
+            }
+            
+            const db = getDatabase();
+            const today = new Date().toISOString().split('T')[0];
+            
+            // Pastikan data hari ini ada
+            if (!db.attendanceData[today]) {
+                db.attendanceData[today] = {};
+            }
+            
+            // Catat absensi dengan timestamp
+            const now = new Date();
+            db.attendanceData[today][currentUser.id] = {
+                status: status,
+                timestamp: now.toISOString()
+            };
+            
+            // Simpan dan perbarui tampilan
+            saveToDatabase(db);
+            checkTodayAttendance();
+            
+            showNotification(`Absensi berhasil dicatat: ${getStatusText(status)}`);
+            
+            // Jika statusnya sakit atau izin, arahkan ke tab form izin
+            if (status === 'sick' || status === 'permit') {
+                switchTab('permit');
+                
+                // Set nilai default untuk form izin
+                document.getElementById('permit-type').value = status === 'sick' ? 'sakit' : 'izin';
+                document.getElementById('permit-date').value = today;
+            }
+            
+            // Simpan state aplikasi
+            saveAppState();
+        }
+
+        // Fungsi untuk render absensi hari ini (teacher)
+        function renderTodayAttendance() {
+            const db = getDatabase();
+            const today = new Date().toISOString().split('T')[0];
+            const tableBody = document.querySelector('#today-attendance-table tbody');
+            
+            // Inisialisasi data hari ini jika belum ada
+            if (!db.attendanceData[today]) {
+                db.attendanceData[today] = {};
+            }
+            
+            todayAttendance = db.attendanceData[today];
+            
+            // Hitung statistik
+            let presentCount = 0;
+            let sickCount = 0;
+            let permitCount = 0;
+            let alfaCount = 0;
+            
+            tableBody.innerHTML = '';
+            
+            students.forEach(student => {
+                const studentAttendance = todayAttendance[student.id];
+                let status = 'Alfa';
+                let waktu = '-';
+                
+                if (studentAttendance) {
+                    status = getStatusText(studentAttendance.status);
+                    waktu = new Date(studentAttendance.timestamp).toLocaleTimeString('id-ID');
+                    
+                    // Hitung statistik
+                    switch(studentAttendance.status) {
+                        case 'present': presentCount++; break;
+                        case 'sick': sickCount++; break;
+                        case 'permit': permitCount++; break;
+                    }
+                } else {
+                    alfaCount++;
+                }
+                
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${student.id}</td>
+                    <td>${student.name}</td>
+                    <td class="status-${studentAttendance ? studentAttendance.status : 'alfa'}">${status}</td>
+                    <td>${waktu}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+            
+            // Update card statistik
+            document.getElementById('today-present-count').textContent = presentCount;
+            document.getElementById('today-sick-count').textContent = sickCount;
+            document.getElementById('today-permit-count').textContent = permitCount;
+            document.getElementById('today-alfa-count').textContent = alfaCount;
+        }
+
+        // Fungsi untuk render management izin (teacher)
+        function renderPermitManagement() {
+            const db = getDatabase();
+            const permitList = document.getElementById('permit-list');
+            
+            // Filter hanya permohonan yang pending
+            const pendingPermits = db.permitData.filter(permit => permit.status === 'pending');
+            
+            if (pendingPermits.length === 0) {
+                permitList.innerHTML = '<p style="text-align: center; color: var(--gray);">Tidak ada permohonan izin yang menunggu persetujuan.</p>';
+                return;
+            }
+            
+            permitList.innerHTML = '';
+            
+            pendingPermits.forEach(permit => {
+                const permitCard = document.createElement('div');
+                permitCard.className = 'permit-card';
+                
+                permitCard.innerHTML = `
+                    <div class="permit-header">
+                        <div class="permit-student">${permit.studentName} (No. ${permit.studentId})</div>
+                        <div class="permit-type">${permit.type.toUpperCase()}</div>
+                    </div>
+                    <div class="permit-details">
+                        <div class="permit-date">📅 ${new Date(permit.date).toLocaleDateString('id-ID')}</div>
+                        <div class="permit-reason">${permit.reason}</div>
+                        ${permit.file ? `<div><strong>File:</strong> <a href="${permit.file}" target="_blank">Lihat dokumen</a></div>` : ''}
+                        <div class="permit-date">⏰ Diajukan: ${new Date(permit.submittedAt).toLocaleString('id-ID')}</div>
+                    </div>
+                    <div class="permit-actions">
+                        <button class="btn btn-approve" data-permit-id="${permit.id}">✅ Setujui</button>
+                        <button class="btn btn-reject" data-permit-id="${permit.id}">❌ Tolak</button>
+                    </div>
+                `;
+                
+                permitList.appendChild(permitCard);
+            });
+            
+            // Tambahkan event listener untuk tombol setujui/tolak
+            document.querySelectorAll('.btn-approve').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    updatePermitStatus(parseInt(this.dataset.permitId), 'approved');
+                });
+            });
+            
+            document.querySelectorAll('.btn-reject').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    updatePermitStatus(parseInt(this.dataset.permitId), 'rejected');
+                });
+            });
+        }
+
+        // Fungsi untuk update status permohonan izin
+        function updatePermitStatus(permitId, status) {
+            const db = getDatabase();
+            const permitIndex = db.permitData.findIndex(p => p.id === permitId);
+            
+            if (permitIndex !== -1) {
+                db.permitData[permitIndex].status = status;
+                db.permitData[permitIndex].processedBy = currentUser.name;
+                db.permitData[permitIndex].processedAt = new Date().toISOString();
+                
+                saveToDatabase({ permitData: db.permitData });
+                renderPermitManagement();
+                
+                showNotification(`Permohonan izin ${status === 'approved' ? 'disetujui' : 'ditolak'}!`);
+            }
+        }
+
+        // Fungsi untuk menangani pengiriman form izin (student)
+        function handlePermitSubmit(e) {
+            e.preventDefault();
+            
+            if (userRole !== 'student') {
+                showNotification('Hanya siswa yang dapat mengajukan izin!', 'error');
+                return;
+            }
+            
+            const permitType = document.getElementById('permit-type').value;
+            const permitDate = document.getElementById('permit-date').value;
+            const permitReason = document.getElementById('permit-reason').value;
+            const permitFile = document.getElementById('permit-file').files[0];
+            
+            // Validasi form
+            if (!permitType || !permitDate || !permitReason) {
+                showNotification('Harap lengkapi semua field yang wajib diisi!', 'error');
+                return;
+            }
+            
+            // Simpan data permohonan izin
+            const db = getDatabase();
+            const permit = {
+                id: Date.now(),
+                studentId: currentUser.id,
+                studentName: currentUser.name,
+                type: permitType,
+                date: permitDate,
+                reason: permitReason,
+                file: permitFile ? URL.createObjectURL(permitFile) : null,
+                fileName: permitFile ? permitFile.name : null,
+                submittedAt: new Date().toISOString(),
+                status: 'pending'
+            };
+            
+            db.permitData.push(permit);
+            saveToDatabase({ permitData: db.permitData });
+            
+            // Reset form
+            document.getElementById('permit-form').reset();
+            document.getElementById('preview').style.display = 'none';
+            
+            showNotification('Permohonan izin berhasil dikirim! Menunggu persetujuan guru.');
+        }
+
+        // Fungsi untuk memuat dan menampilkan rekap absensi bulanan
+        function renderAttendanceSummary() {
+            const db = getDatabase();
+            const month = parseInt(document.getElementById('month-select').value);
+            const year = parseInt(document.getElementById('year-select').value);
+            
+            // Hitung statistik dari data absensi bulanan
+            let totalPresent = 0;
+            let totalSick = 0;
+            let totalPermit = 0;
+            let totalAlfa = 0;
+            
+            // Hitung jumlah hari dalam bulan yang dipilih
+            const daysInMonth = new Date(year, month, 0).getDate();
+            
+            // Hitung statistik untuk setiap siswa
+            const summaryData = students.map(student => {
+                let presentDays = 0;
+                let sickDays = 0;
+                let permitDays = 0;
+                let alfaDays = 0;
+                
+                // Loop melalui setiap hari dalam bulan
+                for (let day = 1; day <= daysInMonth; day++) {
+                    const dateStr = `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+                    
+                    // Cek apakah ada data absensi untuk tanggal ini
+                    if (db.attendanceData[dateStr] && db.attendanceData[dateStr][student.id]) {
+                        const status = db.attendanceData[dateStr][student.id].status;
+                        switch(status) {
+                            case 'present': presentDays++; break;
+                            case 'sick': sickDays++; break;
+                            case 'permit': permitDays++; break;
+                        }
+                    } else {
+                        // Jika tidak ada data absensi, hitung sebagai alfa
+                        alfaDays++;
+                    }
+                }
+                
+                const totalDays = presentDays + sickDays + permitDays + alfaDays;
+                
+                totalPresent += presentDays;
+                totalSick += sickDays;
+                totalPermit += permitDays;
+                totalAlfa += alfaDays;
+                
+                return {
+                    id: student.id,
+                    name: student.name,
+                    presentDays,
+                    sickDays,
+                    permitDays,
+                    alfaDays,
+                    totalDays
+                };
+            });
+            
+            // Update card statistik
+            document.getElementById('present-count').textContent = totalPresent;
+            document.getElementById('sick-count').textContent = totalSick;
+            document.getElementById('permit-count').textContent = totalPermit;
+            document.getElementById('alfa-count').textContent = totalAlfa;
+            document.getElementById('total-count').textContent = students.length;
+            
+            // Update tabel
+            const tableBody = document.querySelector('#attendance-table tbody');
+            tableBody.innerHTML = '';
+            
+            summaryData.forEach(student => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${student.id}</td>
+                    <td>${student.name}</td>
+                    <td class="status-present">${student.presentDays}</td>
+                    <td class="status-sick">${student.sickDays}</td>
+                    <td class="status-permit">${student.permitDays}</td>
+                    <td class="status-alfa">${student.alfaDays}</td>
+                    <td>${student.totalDays}</td>
+                `;
+                tableBody.appendChild(row);
+            });
+        }
+
+        // Fungsi untuk switch tab
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            
+            document.querySelector(`[data-tab="${tabName}"]`).classList.add('active');
+            document.getElementById(tabName).classList.add('active');
+            
+            if (tabName === 'summary') {
+                renderAttendanceSummary();
+            } else if (tabName === 'permits-management' && userRole === 'teacher') {
+                renderPermitManagement();
+            } else if (tabName === 'today-attendance' && userRole === 'teacher') {
+                renderTodayAttendance();
+            }
+            
+            // Simpan state aplikasi
+            saveAppState();
+        }
+
+        // Fungsi untuk logout
+        function logout() {
+            currentUser = null;
+            userRole = null;
+            
+            document.getElementById('login-section').classList.remove('hidden');
+            document.getElementById('main-content').classList.add('hidden');
+            document.getElementById('user-info').classList.add('hidden');
+            document.body.classList.remove('teacher-mode');
+            
+            // Reset form login
+            document.getElementById('student-select').value = '';
+            document.getElementById('teacher-username').value = 'guruxii';
+            document.getElementById('teacher-password').value = 'rpl2023';
+            
+            // Reset state aplikasi
+            const appState = {
+                isLoggedIn: false,
+                userRole: null,
+                userId: null,
+                activeTab: 'attendance'
+            };
+            saveToDatabase({ appState: appState });
+            
+            showNotification('Anda telah logout');
+        }
+
+        // Fungsi untuk update waktu saat ini
+        function updateCurrentTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('id-ID');
+            document.getElementById('current-time-display').textContent = `Waktu saat ini: ${timeString}`;
+        }
+
+        // ==================== EVENT LISTENERS ====================
+
+        // Pilihan jenis login
+        document.querySelectorAll('.login-option').forEach(option => {
+            option.addEventListener('click', function() {
+                document.querySelectorAll('.login-option').forEach(opt => opt.classList.remove('active'));
+                this.classList.add('active');
+                
+                const role = this.dataset.role;
+                if (role === 'student') {
+                    document.getElementById('student-login-form').classList.remove('hidden');
+                    document.getElementById('teacher-login-form').classList.add('hidden');
+                } else {
+                    document.getElementById('teacher-login-form').classList.remove('hidden');
+                    document.getElementById('student-login-form').classList.add('hidden');
+                }
+            });
+        });
+
+        // Login buttons
+        document.getElementById('student-login-btn').addEventListener('click', () => login('student'));
+        document.getElementById('teacher-login-btn').addEventListener('click', () => login('teacher'));
+
+        // Logout button
+        document.getElementById('logout-btn').addEventListener('click', logout);
+
+        // Attendance buttons (student)
+        document.addEventListener('click', function(e) {
+            if (e.target.classList.contains('btn') && e.target.dataset.status) {
+                if (userRole !== 'student') {
+                    showNotification('Hanya siswa yang dapat melakukan absensi!', 'error');
+                    return;
+                }
+                recordAttendance(e.target.dataset.status);
+            }
+        });
+
+        // Tab navigation
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.addEventListener('click', function() {
+                if (!currentUser) {
+                    showNotification('Anda harus login terlebih dahulu!', 'error');
+                    return;
+                }
+                
+                const tabName = this.dataset.tab;
+                switchTab(tabName);
+            });
+        });
+
+        // Form izin
+        document.getElementById('permit-form').addEventListener('submit', handlePermitSubmit);
+
+        // Preview gambar
+        document.getElementById('permit-file').addEventListener('change', function(e) {
+            const file = e.target.files[0];
+            const preview = document.getElementById('preview');
+            
+            if (file && file.type.startsWith('image/')) {
+                const reader = new FileReader();
+                reader.onload = function() {
+                    preview.src = reader.result;
+                    preview.style.display = 'block';
+                };
+                reader.readAsDataURL(file);
+            } else {
+                preview.style.display = 'none';
+            }
+        });
+
+        // Export PDF
+        document.getElementById('export-pdf').addEventListener('click', function() {
+            showNotification('Fitur export PDF akan segera hadir!', 'warning');
+        });
+
+        // Filter bulan/tahun
+        document.getElementById('month-select').addEventListener('change', renderAttendanceSummary);
+        document.getElementById('year-select').addEventListener('change', renderAttendanceSummary);
+
+        // ==================== INITIALIZATION ====================
+
+        document.addEventListener('DOMContentLoaded', function() {
+            // Inisialisasi database
+            initializeDatabase();
+            
+            // Render UI
+            renderStudentSelect();
+            renderYearSelect();
+            renderAttendanceSummary();
+            
+            // Set tanggal default
+            const today = new Date();
+            document.getElementById('permit-date').value = today.toISOString().split('T')[0];
+            document.getElementById('month-select').value = today.getMonth() + 1;
+            document.getElementById('year-select').value = today.getFullYear();
+            
+            // Tampilkan tanggal
+            const options = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+            document.getElementById('current-date').textContent = today.toLocaleDateString('id-ID', options);
+            
+            // Update waktu saat ini setiap detik
+            updateCurrentTime();
+            setInterval(updateCurrentTime, 1000);
+            
+            // Pulihkan state aplikasi
+            restoreAppState();
+            
+            showNotification('Silakan pilih jenis login untuk mulai menggunakan sistem');
+        });
+    </script>
+</body>
+</html>
